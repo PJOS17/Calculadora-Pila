@@ -1,0 +1,137 @@
+@startuml CalculadoraPila_SequenceDiagram
+
+participant Main
+participant PostfixCalculator
+participant Stack as "Stack<Integer>\n(Vector)"
+
+activate Main
+Main ->> PostfixCalculator: <<create>> PostfixCalculator(new Vector<>())
+activate PostfixCalculator
+
+Main ->> PostfixCalculator: evaluate("1 2 + 4 * 3 +")
+activate PostfixCalculator
+
+note over PostfixCalculator
+    Procesa la expresión:
+    1. Parse tokens
+    2. Procesa cada token
+end note
+
+PostfixCalculator ->> Stack: push(1)
+activate Stack
+Stack -->> PostfixCalculator: 
+deactivate Stack
+
+PostfixCalculator ->> Stack: push(2)
+activate Stack
+Stack -->> PostfixCalculator:
+deactivate Stack
+
+note over PostfixCalculator
+    Token: "+"
+    Operador encontrado
+end note
+
+PostfixCalculator ->> Stack: pop()
+activate Stack
+Stack -->> PostfixCalculator: 2
+deactivate Stack
+
+PostfixCalculator ->> Stack: pop()
+activate Stack
+Stack -->> PostfixCalculator: 1
+deactivate Stack
+
+note over PostfixCalculator
+    Calcula: 1 + 2 = 3
+    1 es operandoA (primero sacado)
+    2 es operandoB (segundo sacado)
+    Resultado = operandoA op operandoB
+end note
+
+PostfixCalculator ->> Stack: push(3)
+activate Stack
+Stack -->> PostfixCalculator:
+deactivate Stack
+
+PostfixCalculator ->> Stack: push(4)
+activate Stack
+Stack -->> PostfixCalculator:
+deactivate Stack
+
+note over PostfixCalculator
+    Token: "*"
+    Operador encontrado
+end note
+
+PostfixCalculator ->> Stack: pop()
+activate Stack
+Stack -->> PostfixCalculator: 4
+deactivate Stack
+
+PostfixCalculator ->> Stack: pop()
+activate Stack
+Stack -->> PostfixCalculator: 3
+deactivate Stack
+
+note over PostfixCalculator
+    Calcula: 3 * 4 = 12
+end note
+
+PostfixCalculator ->> Stack: push(12)
+activate Stack
+Stack -->> PostfixCalculator:
+deactivate Stack
+
+PostfixCalculator ->> Stack: push(3)
+activate Stack
+Stack -->> PostfixCalculator:
+deactivate Stack
+
+note over PostfixCalculator
+    Token: "+"
+    Operador encontrado
+end note
+
+PostfixCalculator ->> Stack: pop()
+activate Stack
+Stack -->> PostfixCalculator: 3
+deactivate Stack
+
+PostfixCalculator ->> Stack: pop()
+activate Stack
+Stack -->> PostfixCalculator: 12
+deactivate Stack
+
+note over PostfixCalculator
+    Calcula: 12 + 3 = 15
+end note
+
+PostfixCalculator ->> Stack: push(15)
+activate Stack
+Stack -->> PostfixCalculator:
+deactivate Stack
+
+note over PostfixCalculator
+    Verificar que solo hay
+    un elemento en la pila
+end note
+
+PostfixCalculator ->> Stack: pop()
+activate Stack
+Stack -->> PostfixCalculator: 15
+deactivate Stack
+
+PostfixCalculator ->> Stack: isEmpty()
+activate Stack
+Stack -->> PostfixCalculator: true
+deactivate Stack
+
+PostfixCalculator -->> Main: 15
+deactivate PostfixCalculator
+
+Main ->> Main: Imprime resultado
+
+deactivate Main
+
+@enduml
